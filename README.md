@@ -2,99 +2,105 @@
 
 ## Overview
 
-This project implements an end-to-end trio-based Whole Exome Sequencing (WES) workflow using the Genome In A Bottle (GIAB) Ashkenazim Trio to identify candidate de novo variants and perform rare disease interpretation.
+This project implements a complete trio-based Whole Exome Sequencing (WES) workflow to identify candidate de novo variants associated with rare genetic diseases.
 
-The workflow follows standard bioinformatics practices including quality control, read trimming, alignment, variant calling, trio-based filtering, annotation, and phenotype interpretation.
+The analysis uses the Genome in a Bottle (GIAB) Ashkenazim Trio and follows standard NGS best practices including quality control, read alignment, variant calling, annotation, and rare disease interpretation.
+
+---
+
+## Objective
+
+Identify high-confidence candidate de novo variants in the proband by comparing variants against both parents and perform downstream rare disease interpretation.
+
+---
+
+## Samples
+
+| Sample | GIAB ID | Relationship |
+| ------ | ------- | ------------ |
+| HG002  | NA24385 | Proband      |
+| HG003  | NA24149 | Father       |
+| HG004  | NA24143 | Mother       |
 
 ---
 
 ## Dataset
 
-### GIAB Ashkenazim Trio
+Genome in a Bottle (GIAB) Ashkenazim Trio
 
-| Sample | Identifier | Role    |
-| ------ | ---------- | ------- |
-| HG002  | NA24385    | Proband |
-| HG003  | NA24149    | Father  |
-| HG004  | NA24143    | Mother  |
-
-Reference Genome:
-
-* Human Genome Assembly GRCh38 (hg38)
+Reference Genome: GRCh38 (hg38)
 
 ---
 
 ## Workflow
 
-```text
-FASTQ
- ↓
-FastQC
- ↓
-Trimmomatic
- ↓
-BWA-MEM Alignment
- ↓
-SAMtools Sort & Index
- ↓
-GATK HaplotypeCaller
- ↓
-VCF Generation
- ↓
-Trio VCF Merge
- ↓
-De Novo Variant Filtering
- ↓
-Annotation
- ↓
-OMIM Interpretation
- ↓
-HPO Phenotype Matching
-```
+1. FastQC Quality Assessment
+2. Adapter and Quality Trimming (Trimmomatic)
+3. Post-trimming Quality Control
+4. MultiQC Summary Report
+5. Alignment using BWA-MEM
+6. BAM Processing and Indexing
+7. Variant Calling using GATK HaplotypeCaller
+8. Trio VCF Generation
+9. De Novo Variant Filtering
+10. Variant Annotation
+11. Rare Disease Interpretation
+12. Final Candidate Variant Prioritization
 
 ---
 
-## Tools
+## Tools Used
 
 * FastQC
 * MultiQC
 * Trimmomatic
 * BWA-MEM
 * SAMtools
-* GATK 4.6.2.0
-* bcftools
+* GATK
+* BCFtools
 * ANNOVAR
+* GitHub
 
 ---
 
-## Project Status
+## Current Progress
 
-* [x] Quality Control
-* [x] Read Trimming
-* [x] Alignment
-* [x] BAM Processing
-* [ ] Variant Calling
-* [ ] Trio VCF Merge
-* [ ] De Novo Filtering
-* [ ] Annotation
-* [ ] Clinical Interpretation
+### Completed
+
+* FastQC
+* Trimmomatic
+* Post-trim FastQC
+* MultiQC
+* hg38 Download
+* BWA Indexing
+* Alignment
+* BAM Processing
+* BAM Indexing
+
+### In Progress
+
+* GATK HaplotypeCaller
+
+### Planned
+
+* Trio VCF Merge
+* De Novo Variant Detection
+* Annotation
+* OMIM Interpretation
+* HPO Matching
+* Final Report
 
 ---
 
-## Expected Outputs
+## Repository Structure
 
-* BAM files for all trio members
-* Individual VCF files
-* Merged Trio VCF
-* Candidate de novo variant table
-* Annotated variant report
-* OMIM interpretation
-* HPO phenotype matching
-* Final diagnostic report
+See the docs folder for workflow details and project logs.
 
 ---
 
 ## Author
 
-*Vedika Goyal
-*B.Tech Computer Science and Bioinformatics
+Vedika Goyal
+
+B.Tech Computer Science and Bioinformatics
+VIT Vellore
