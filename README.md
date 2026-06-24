@@ -4,13 +4,13 @@
 
 This project implements a complete trio-based Whole Exome Sequencing (WES) workflow to identify candidate de novo variants associated with rare genetic diseases.
 
-The analysis uses the Genome in a Bottle (GIAB) Ashkenazim Trio and follows standard NGS best practices including quality control, read alignment, variant calling, annotation, and rare disease interpretation.
+The analysis uses the Genome in a Bottle (GIAB) Ashkenazim Trio and follows standard NGS best practices including quality control, read alignment, variant calling, trio comparison, and candidate variant prioritization.
 
 ---
 
 ## Objective
 
-Identify high-confidence candidate de novo variants in the proband by comparing variants against both parents and perform downstream rare disease interpretation.
+Identify high-confidence candidate de novo variants in the proband by comparing variant calls against both parents and prioritize candidate variants for downstream rare disease interpretation.
 
 ---
 
@@ -26,26 +26,45 @@ Identify high-confidence candidate de novo variants in the proband by comparing 
 
 ## Dataset
 
-Genome in a Bottle (GIAB) Ashkenazim Trio
+**Genome in a Bottle (GIAB) Ashkenazim Trio**
 
-Reference Genome: GRCh38 (hg38)
+Reference Genome: **GRCh38 (hg38)**
 
 ---
 
 ## Workflow
 
-1. FastQC Quality Assessment
-2. Adapter and Quality Trimming (Trimmomatic)
-3. Post-trimming Quality Control
-4. MultiQC Summary Report
-5. Alignment using BWA-MEM
-6. BAM Processing and Indexing
-7. Variant Calling using GATK HaplotypeCaller
-8. Trio VCF Generation
-9. De Novo Variant Filtering
-10. Variant Annotation
-11. Rare Disease Interpretation
-12. Final Candidate Variant Prioritization
+```text
+FASTQ Files
+    ↓
+FastQC
+    ↓
+Trimmomatic
+    ↓
+Post-trim FastQC
+    ↓
+MultiQC
+    ↓
+BWA-MEM Alignment
+    ↓
+SAM → BAM
+    ↓
+BAM Sorting & Indexing
+    ↓
+GATK HaplotypeCaller
+    ↓
+Individual VCF Generation
+    ↓
+bcftools Merge
+    ↓
+Trio VCF Creation
+    ↓
+Candidate De Novo Variant Discovery
+    ↓
+Quality Filtering
+    ↓
+High-Confidence Candidate Variants
+```
 
 ---
 
@@ -56,51 +75,128 @@ Reference Genome: GRCh38 (hg38)
 * Trimmomatic
 * BWA-MEM
 * SAMtools
-* GATK
-* BCFtools
-* ANNOVAR
+* GATK HaplotypeCaller
+* bcftools
+* Google Colab
+* Google Drive
 * GitHub
 
 ---
 
-## Current Progress
+## Analysis Summary
 
-### Completed
+### Variant Calling Results
 
-* FastQC
-* Trimmomatic
-* Post-trim FastQC
-* MultiQC
-* hg38 Download
-* BWA Indexing
-* Alignment
-* BAM Processing
-* BAM Indexing
+| Sample          | Variants Identified |
+| --------------- | ------------------: |
+| HG002 (Proband) |             399,776 |
+| HG003 (Father)  |             399,422 |
+| HG004 (Mother)  |             400,620 |
 
-### In Progress
+### Trio Analysis Results
 
-* GATK HaplotypeCaller
+| Step                               | Variants Remaining |
+| ---------------------------------- | -----------------: |
+| Proband variants                   |            399,776 |
+| Proband-specific variants          |            326,454 |
+| High-confidence candidate variants |                916 |
 
-### Planned
+### Candidate Variant Composition
 
-* Trio VCF Merge
-* De Novo Variant Detection
-* Annotation
-* OMIM Interpretation
-* HPO Matching
-* Final Report
+| Variant Type       | Count |
+| ------------------ | ----: |
+| SNPs               |   818 |
+| Indels             |   102 |
+| Multiallelic Sites |    47 |
+
+---
+
+## Key Files Generated
+
+### Alignment Files
+
+* proband.bam
+* father.bam
+* mother.bam
+
+### Variant Files
+
+* proband.vcf
+* father.vcf
+* mother.vcf
+* trio.vcf
+
+### Candidate Variant Files
+
+* denovo_highconf.vcf
+* denovo_stats.txt
+
+---
+
+## Results
+
+A trio-based variant comparison workflow was performed using bcftools to identify variants present in the proband and absent from both parents.
+
+Quality filters were applied:
+
+* QUAL ≥ 30
+* DP ≥ 10
+* GQ ≥ 20
+
+This reduced the candidate set from approximately 400,000 variants to 916 high-confidence candidate variants.
+
+---
+
+## Limitations
+
+Variant calling was performed independently for each sample using GATK HaplotypeCaller and subsequently compared using bcftools.
+
+Joint genotyping using the GVCF workflow:
+
+* HaplotypeCaller (-ERC GVCF)
+* CombineGVCFs
+* GenotypeGVCFs
+
+was not performed in this version of the project.
+
+Therefore, identified variants should be considered **putative de novo candidate variants** rather than fully validated de novo mutations.
+
+---
+
+## Future Work
+
+* Functional annotation using ANNOVAR, VEP, or snpEff
+* ClinVar pathogenicity assessment
+* OMIM disease association analysis
+* HPO phenotype matching
+* Joint-genotyping GVCF workflow
+* Candidate gene prioritization
 
 ---
 
 ## Repository Structure
 
-See the docs folder for workflow details and project logs.
+```text
+Trio-WES-RareDisease-Analysis/
+│
+├── README.md
+├── docs/
+├── scripts/
+├── results/
+│
+├── proband.vcf
+├── father.vcf
+├── mother.vcf
+├── trio.vcf
+│
+└── denovo_highconf.vcf
+```
 
 ---
 
 ## Author
 
-Vedika Goyal
+**Vedika Goyal**
 
 B.Tech Computer Science and Bioinformatics
 VIT Vellore
