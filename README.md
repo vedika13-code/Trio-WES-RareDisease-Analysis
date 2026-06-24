@@ -96,5 +96,5 @@ HPO Phenotype Matching
 
 ## Author
 
-Vedika Goyal
-B.Tech Computer Science and Bioinformatics
+*Vedika Goyal
+*B.Tech Computer Science and Bioinformatics
