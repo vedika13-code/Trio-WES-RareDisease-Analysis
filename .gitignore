@@ -1,0 +1,29 @@
+# Raw sequencing data
+*.fastq
+*.fastq.gz
+
+# Alignment files
+*.sam
+*.bam
+*.bai
+
+# Variant files
+*.vcf
+*.vcf.gz
+
+# Reference genome
+*.fa
+*.fai
+*.dict
+*.amb
+*.ann
+*.bwt
+*.pac
+*.sa
+
+# QC reports
+*.html
+*.zip
+
+# macOS
+.DS_Store
