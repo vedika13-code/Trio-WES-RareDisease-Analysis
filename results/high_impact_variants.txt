@@ -1,0 +1,3 @@
+chr14	92688193	92688195	GGC	-	exonic	RIN3	.	nonframeshift deletion	RIN3:NM_001319987.1:exon9:c.2674_2676del:p.G897del,RIN3:NM_024832.5:exon10:c.2899_2901del:p.G972del
+chr7	117627715	117627715	A	-	exonic	CFTR	.	frameshift deletion	CFTR:NM_000492.4:exon22:c.3662delA:p.G1222Vfs*6
+chr8	17118730	17118730	C	-	exonic	MICU3	.	frameshift deletion	MICU3:NM_001349810.1:exon14:c.1530delC:p.T512Lfs*6,MICU3:NM_181723.3:exon14:c.1548delC:p.T518Lfs*6

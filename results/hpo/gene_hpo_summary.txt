@@ -1,0 +1,16 @@
+BRCA2	Abnormal thumb morphology
+F8	Stroke
+IHH	Broad palm
+KCNMB1	Autosomal dominant inheritance
+MYH6	Left ventricular systolic dysfunction
+ROS1	Abdominal pain
+DNAH17	Autosomal recessive inheritance
+BAG5	Left ventricular systolic dysfunction
+DOLK	Tetraplegia
+PLCH1	Poor speech
+P4HTM	Severe intellectual disability
+ATP10A	Poor speech
+DISP1	Poor speech
+COG7	Adducted thumb
+PKD1L1	Right aortic arch
+ADAMTS17	Brachydactyly
