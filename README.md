@@ -1,176 +1,94 @@
-# Trio-WES-RareDisease-Analysis
+# Trio-Based Whole Exome Sequencing Analysis for Rare Disease Variant Discovery
 
 ## Overview
 
-This project implements a complete trio-based Whole Exome Sequencing (WES) workflow to identify candidate de novo variants associated with rare genetic diseases.
+This project implements a complete **trio-based Whole Exome Sequencing (WES) bioinformatics pipeline** for identifying and prioritizing candidate **de novo variants** associated with rare genetic diseases.
 
-The analysis uses the Genome in a Bottle (GIAB) Ashkenazim Trio and follows standard NGS best practices including quality control, read alignment, variant calling, trio comparison, and candidate variant prioritization.
+The analysis was performed using the **Genome in a Bottle (GIAB) Ashkenazim Trio** benchmark dataset and follows GATK Best Practices for joint variant calling. Downstream annotation and biological interpretation were performed using **ANNOVAR**, **OMIM**, and the **Human Phenotype Ontology (HPO)**.
 
----
-
-## Objective
-
-Identify high-confidence candidate de novo variants in the proband by comparing variant calls against both parents and prioritize candidate variants for downstream rare disease interpretation.
+> **Note:** The GIAB Ashkenazim Trio is a benchmark reference dataset and not a clinical cohort. Therefore, the identified variants are presented as candidate variants for methodological demonstration rather than confirmed disease-causing mutations.
 
 ---
 
-## Samples
+## Project Objectives
 
-| Sample | GIAB ID | Relationship |
-| ------ | ------- | ------------ |
-| HG002  | NA24385 | Proband      |
-| HG003  | NA24149 | Father       |
-| HG004  | NA24143 | Mother       |
+* Perform quality assessment of raw sequencing reads.
+* Trim adapters and low-quality bases.
+* Align reads to the GRCh38 (hg38) reference genome.
+* Perform variant calling using GATK HaplotypeCaller.
+* Conduct joint genotyping across the trio.
+* Identify candidate de novo variants.
+* Functionally annotate variants using ANNOVAR.
+* Prioritize variants using OMIM and HPO databases.
+* Interpret biologically relevant candidate variants.
 
 ---
 
 ## Dataset
 
-**Genome in a Bottle (GIAB) Ashkenazim Trio**
-
-Reference Genome: **GRCh38 (hg38)**
+| Parameter        | Details                                   |
+| ---------------- | ----------------------------------------- |
+| Dataset          | Genome in a Bottle (GIAB) Ashkenazim Trio |
+| Proband          | HG002 (NA24385)                           |
+| Father           | HG003 (NA24149)                           |
+| Mother           | HG004 (NA24143)                           |
+| Sequencing       | Whole Exome Sequencing (WES)              |
+| Platform         | Illumina Paired-End                       |
+| Read Length      | 2 × 250 bp                                |
+| Reference Genome | GRCh38 (hg38)                             |
 
 ---
 
-## Workflow
+## Bioinformatics Workflow
 
 ```text
-FASTQ Files
-    ↓
+FASTQ
+   │
 FastQC
-    ↓
+   │
 Trimmomatic
-    ↓
-Post-trim FastQC
-    ↓
-MultiQC
-    ↓
+   │
+Post-trim FastQC + MultiQC
+   │
 BWA-MEM Alignment
-    ↓
-SAM → BAM
-    ↓
-BAM Sorting & Indexing
-    ↓
-GATK HaplotypeCaller
-    ↓
-Individual VCF Generation
-    ↓
-bcftools Merge
-    ↓
-Trio VCF Creation
-    ↓
-Candidate De Novo Variant Discovery
-    ↓
-Quality Filtering
-    ↓
-High-Confidence Candidate Variants
+   │
+SAMtools (Sort & Index)
+   │
+GATK HaplotypeCaller (GVCF)
+   │
+CombineGVCFs
+   │
+GenotypeGVCFs
+   │
+Joint Trio VCF
+   │
+De Novo Variant Filtering
+   │
+ANNOVAR Annotation
+   │
+OMIM Mapping
+   │
+HPO Mapping
+   │
+Biological Interpretation
 ```
 
 ---
 
-## Tools Used
+## Software Used
 
-* FastQC
-* MultiQC
-* Trimmomatic
-* BWA-MEM
-* SAMtools
-* GATK HaplotypeCaller
-* bcftools
-* Google Colab
-* Google Drive
-* GitHub
-
----
-
-## Analysis Summary
-
-### Variant Calling Results
-
-| Sample          | Variants Identified |
-| --------------- | ------------------: |
-| HG002 (Proband) |             399,776 |
-| HG003 (Father)  |             399,422 |
-| HG004 (Mother)  |             400,620 |
-
-### Trio Analysis Results
-
-| Step                               | Variants Remaining |
-| ---------------------------------- | -----------------: |
-| Proband variants                   |            399,776 |
-| Proband-specific variants          |            326,454 |
-| High-confidence candidate variants |                916 |
-
-### Candidate Variant Composition
-
-| Variant Type       | Count |
-| ------------------ | ----: |
-| SNPs               |   818 |
-| Indels             |   102 |
-| Multiallelic Sites |    47 |
-
----
-
-## Key Files Generated
-
-### Alignment Files
-
-* proband.bam
-* father.bam
-* mother.bam
-
-### Variant Files
-
-* proband.vcf
-* father.vcf
-* mother.vcf
-* trio.vcf
-
-### Candidate Variant Files
-
-* denovo_highconf.vcf
-* denovo_stats.txt
-
----
-
-## Results
-
-A trio-based variant comparison workflow was performed using bcftools to identify variants present in the proband and absent from both parents.
-
-Quality filters were applied:
-
-* QUAL ≥ 30
-* DP ≥ 10
-* GQ ≥ 20
-
-This reduced the candidate set from approximately 400,000 variants to 916 high-confidence candidate variants.
-
----
-
-## Limitations
-
-Variant calling was performed independently for each sample using GATK HaplotypeCaller and subsequently compared using bcftools.
-
-Joint genotyping using the GVCF workflow:
-
-* HaplotypeCaller (-ERC GVCF)
-* CombineGVCFs
-* GenotypeGVCFs
-
-was not performed in this version of the project.
-
-Therefore, identified variants should be considered **putative de novo candidate variants** rather than fully validated de novo mutations.
-
----
-
-## Future Work
-
-* Functional annotation using ANNOVAR, VEP, or snpEff
-* ClinVar pathogenicity assessment
-* OMIM disease association analysis
-* HPO phenotype matching
-* Joint-genotyping GVCF workflow
-* Candidate gene prioritization
+| Tool              | Version                 |
+| ----------------- | ----------------------- |
+| FastQC            | Latest                  |
+| MultiQC           | Latest                  |
+| Trimmomatic       | Latest                  |
+| BWA-MEM           | Latest                  |
+| SAMtools          | Latest                  |
+| BCFtools          | Latest                  |
+| GATK              | 4.6.2.0                 |
+| ANNOVAR           | Latest                  |
+| Google Colab      | Runtime Environment     |
+| OrbStack (Ubuntu) | Local Linux Environment |
 
 ---
 
@@ -179,18 +97,64 @@ Therefore, identified variants should be considered **putative de novo candidate
 ```text
 Trio-WES-RareDisease-Analysis/
 │
-├── README.md
-├── docs/
+├── notebooks/
 ├── scripts/
+├── docs/
+├── figures/
 ├── results/
-│
-├── proband.vcf
-├── father.vcf
-├── mother.vcf
-├── trio.vcf
-│
-└── denovo_highconf.vcf
+│   ├── vcf/
+│   ├── omim/
+│   └── hpo/
+├── README.md
+└── LICENSE
 ```
+
+---
+
+## Results Summary
+
+| Result                     |  Count |
+| -------------------------- | -----: |
+| Candidate de novo variants | 12,776 |
+| Coding variants            |    116 |
+| Nonsynonymous SNVs         |     72 |
+| Synonymous SNVs            |     41 |
+| Frameshift deletions       |      2 |
+| Nonframeshift deletions    |      1 |
+
+### High-impact Candidate Variants
+
+* **CFTR** – Frameshift deletion (p.G1222Vfs*6)
+* **MICU3** – Frameshift deletion (p.T512Lfs*6)
+* **RIN3** – Nonframeshift deletion (p.G897del)
+
+---
+
+## Biological Interpretation
+
+Candidate variants were prioritized using functional annotation together with OMIM disease associations and Human Phenotype Ontology (HPO) annotations. Because the GIAB Ashkenazim Trio is a benchmark dataset without clinical phenotype information, biological interpretation focused on demonstrating a reproducible rare disease analysis workflow rather than establishing clinical diagnoses.
+
+---
+
+## Future Improvements
+
+* Base Quality Score Recalibration (BQSR)
+* Population frequency filtering (gnomAD)
+* Pathogenicity prediction (SIFT, PolyPhen-2, CADD)
+* ACMG variant classification
+* Clinical phenotype integration
+* Experimental validation using Sanger sequencing
+
+---
+
+## Acknowledgements
+
+* Genome in a Bottle (GIAB)
+* Broad Institute GATK Team
+* ANNOVAR
+* OMIM
+* Human Phenotype Ontology (HPO)
+* National Center for Biotechnology Information (NCBI)
 
 ---
 
@@ -198,5 +162,8 @@ Trio-WES-RareDisease-Analysis/
 
 **Vedika Goyal**
 
-B.Tech Computer Science and Bioinformatics
+B.Tech Computer Science and Engineering (Bioinformatics)
+
 VIT Vellore
+
+2026
